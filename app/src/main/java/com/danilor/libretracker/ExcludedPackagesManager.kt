@@ -1,3 +1,5 @@
+package com.danilor.libretracker
+
 import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
@@ -8,7 +10,7 @@ object ExcludedPackagesManager {
     private lateinit var filePath: String
 
     fun initialize(appContext: Context) {
-        this.filePath = File(appContext.applicationContext.filesDir, FILE_NAME).absolutePath
+        filePath = File(appContext.applicationContext.filesDir, FILE_NAME).absolutePath
         createFileIfNotExists()
         loadExcludedPackagesFromFile()
     }

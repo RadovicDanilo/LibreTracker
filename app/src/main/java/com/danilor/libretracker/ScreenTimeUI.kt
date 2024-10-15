@@ -1,7 +1,5 @@
 package com.danilor.libretracker
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScreenTimeUI() {
     val context = LocalContext.current
