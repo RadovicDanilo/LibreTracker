@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import java.time.LocalDateTime
 
 @Composable
 fun ScreenTimeUI() {
@@ -25,7 +26,10 @@ fun ScreenTimeUI() {
     var totalTimeSpent by remember { mutableStateOf(0L) }
 
     LaunchedEffect(key1 = Unit) {
-        totalTimeSpent = 0
+        totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
+            context,
+            LocalDateTime.now().toLocalDate().atStartOfDay()
+        )
     }
 
     Column(
@@ -43,7 +47,10 @@ fun ScreenTimeUI() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            totalTimeSpent = 0
+            totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
+                context,
+                LocalDateTime.now().toLocalDate().atStartOfDay()
+            )
         }) {
             Text("Refresh")
         }
