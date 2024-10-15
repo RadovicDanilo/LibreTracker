@@ -1,9 +1,6 @@
 package com.danilor.libretracker
 
-import android.app.usage.UsageStatsManager
-import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,23 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import java.time.Duration
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZonedDateTime
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun getScreenTimeInMinuetsForToday(context: Context): Long {
-    val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-    val end = ZonedDateTime.now().toInstant().toEpochMilli()
-
-    val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-    val stats = usageStatsManager.queryAndAggregateUsageStats(start, end)
-
-    val total = Duration.ofMillis(stats.values.map { it.totalTimeInForeground }.sum())
-    Log.d("XDDD","YOU SPENT ${total.toMinutes()} mins.")
-    return total.toMinutes()
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -48,7 +28,7 @@ fun ScreenTimeUI() {
     var totalTimeSpent by remember { mutableStateOf(0L) }
 
     LaunchedEffect(key1 = Unit) {
-        totalTimeSpent = getScreenTimeInMinuetsForToday(context)
+        totalTimeSpent = 0
     }
 
     Column(
@@ -66,7 +46,7 @@ fun ScreenTimeUI() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            totalTimeSpent = getScreenTimeInMinuetsForToday(context)
+            totalTimeSpent = 0
         }) {
             Text("Refresh")
         }

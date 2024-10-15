@@ -1,22 +1,19 @@
-package com.danilor.libretracker
-
 import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 
-class ExcludedPackagesManager(private val context: Context) {
+object ExcludedPackagesManager {
+    private const val FILE_NAME = "excluded_packages.json"
+    private lateinit var filePath: String
 
-    init {
+    fun initialize(appContext: Context) {
+        this.filePath = File(appContext.applicationContext.filesDir, FILE_NAME).absolutePath
         createFileIfNotExists()
         loadExcludedPackagesFromFile()
     }
 
-    companion object {
-        private var excludedPackages: MutableList<String> = mutableListOf()
-    }
-
-    private val filePath = "excluded_package.json"
+    private var excludedPackages: MutableList<String> = mutableListOf()
 
     fun getExcludedPackages(): List<String> {
         return excludedPackages
