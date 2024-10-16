@@ -1,42 +1,86 @@
 package com.danilor.libretracker
 
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.util.Log
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 object UsageTimeManager {
+    data class AppStateModel(
+        val packageName: String,
+        var startTime: Long = 0,
+        var endTime: Long = 0,
+        var totalTime: Long = 0,
+        var totalCapacity: Double = 0.0,
+        var currentCapacity: Double = 0.0,
+        var isAlreadyResume: Boolean = false,
+        var className: String = "",
+        var classMap: HashMap<String, BoolObj> = HashMap()
+    )
+
+    data class BoolObj(
+        var startTime: Long,
+        var isResume: Boolean
+    )
+
     fun getDailyUsageTimeInMinutes(context: Context, date: LocalDateTime): Long {
+        val stateMap = HashMap<String, AppStateModel>()
+        val usageStatsManager =
+            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
         val startDate =
-            date.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant()
-                .toEpochMilli()
+            date.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val endDate =
             date.toLocalDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
                 .toEpochMilli()
 
-        val usageStatsManager =
-            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        val stats = usageStatsManager.queryAndAggregateUsageStats(startDate, endDate)
-
         val excludedPackages = ExcludedPackagesManager.getExcludedPackages()
-        var totalMillis = 0L
 
-        Log.d("USAGE INFO DEBUG", "----------BEGIN")
-        Log.d("USAGE INFO DEBUG", "start time: $startDate")
-        Log.d("USAGE INFO DEBUG", "end time: $endDate")
+        val eventList = usageStatsManager.queryEvents(startDate, endDate)
+        while (eventList.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            eventList.getNextEvent(event)
 
-        for ((packageName, usageStats) in stats) {
-            if (!excludedPackages.contains(packageName)) {
-                Log.d("USAGE INFO DEBUG", "$packageName ${usageStats.totalTimeInForeground}")
-                totalMillis += usageStats.totalTimeInForeground
+            if (!excludedPackages.contains(event.packageName)) {
+                if (event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                    val packageCheck = stateMap[event.packageName]
+                    if (packageCheck != null) {
+                        if (stateMap[event.packageName]!!.classMap[event.className] != null) {
+                            stateMap[event.packageName]!!.className = event.className
+                            stateMap[event.packageName]!!.startTime = event.timeStamp
+                            stateMap[event.packageName]!!.classMap[event.className]!!.startTime =
+                                event.timeStamp
+                            stateMap[event.packageName]!!.classMap[event.className]!!.isResume =
+                                true
+                        } else {
+                            stateMap[event.packageName]!!.className = event.className
+                            stateMap[event.packageName]!!.startTime = event.timeStamp
+                            stateMap[event.packageName]!!.classMap[event.className] =
+                                BoolObj(event.timeStamp, true)
+                        }
+                    } else {
+                        val appStates = AppStateModel(
+                            packageName = event.packageName,
+                            className = event.className,
+                            startTime = event.timeStamp
+                        )
+                        appStates.classMap[event.className] = BoolObj(event.timeStamp, true)
+                        stateMap[event.packageName] = appStates
+                    }
+                } else if (event.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
+                    val packageCheck = stateMap[event.packageName]
+                    if (packageCheck != null) {
+                        if (stateMap[event.packageName]!!.classMap[event.className] != null) {
+                            stateMap[event.packageName]!!.totalTime += event.timeStamp - stateMap[event.packageName]!!.classMap[event.className]!!.startTime
+                            stateMap[event.packageName]!!.classMap[event.className]!!.isResume =
+                                false
+                        }
+                    }
+                }
             }
         }
 
-        Log.d("USAGE INFO DEBUG", "----------END")
-
-        return Duration.ofMillis(totalMillis).toMinutes()
+        return stateMap.values.sumOf { it.totalTime } / 60000
     }
-
 }
