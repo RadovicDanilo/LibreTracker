@@ -18,6 +18,7 @@ object UsageTimeManager {
         var isResume: Boolean
     )
 
+    //TODO enhance this
     fun getDailyUsageTimeInMinutes(context: Context, date: LocalDateTime): Long {
         val usageStatsManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
@@ -36,6 +37,7 @@ object UsageTimeManager {
             eventList.getNextEvent(event)
 
             if (excludedPackages.contains(event.packageName)) continue
+            if (event.className == null) continue
 
             val packageState =
                 stateMap.getOrPut(event.packageName) { AppStateModel(event.packageName) }
