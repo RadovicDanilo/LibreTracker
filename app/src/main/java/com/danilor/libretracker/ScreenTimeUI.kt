@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +27,7 @@ fun ScreenTimeUI() {
     val context = LocalContext.current
     var totalTimeSpent by remember { mutableStateOf(0L) }
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(Unit) {
         totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
             context,
             LocalDateTime.now().toLocalDate().atStartOfDay()
@@ -35,24 +37,39 @@ fun ScreenTimeUI() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Total screen time today:")
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Total Screen Time Today",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
-        Text("${totalTimeSpent / 60}:${totalTimeSpent % 60}")
+        Spacer(modifier = Modifier.height(24.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = String.format("%02d:%02d", totalTimeSpent / 60, totalTimeSpent % 60),
+            style = MaterialTheme.typography.displayMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
 
-        Button(onClick = {
-            totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
-                context,
-                LocalDateTime.now().toLocalDate().atStartOfDay()
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(
+            onClick = {
+                totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
+                    context,
+                    LocalDateTime.now().toLocalDate().atStartOfDay()
+                )
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
-        }) {
-            Text("Refresh")
+        ) {
+            Text(text = "Refresh")
         }
     }
 }
