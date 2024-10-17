@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+//TODO make it go to ScreenTimeUI once permissions have been granted
+
 @Composable
 fun RequestPermissionScreen(onRequestPermission: () -> Unit) {
     Column(
@@ -40,7 +42,7 @@ fun RequestPermissionScreen(onRequestPermission: () -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(
-            text = "This app needs permission to access your usage data.",
+            text = "Libre Tracker needs permission to access your usage data.",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground

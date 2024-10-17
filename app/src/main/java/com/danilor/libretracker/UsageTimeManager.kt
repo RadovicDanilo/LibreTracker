@@ -5,6 +5,7 @@ import android.app.usage.UsageStatsManager
 import android.content.Context
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 
 object UsageTimeManager {
     data class AppStateModel(
@@ -19,7 +20,7 @@ object UsageTimeManager {
     )
 
     //TODO enhance this
-    fun getDailyUsageTimeInMinutes(context: Context, date: LocalDateTime): Long {
+    fun getDailyUsageTimeInMinutes(context: Context, date: LocalDateTime): UsageInfoDaily {
         val usageStatsManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val startDate =
@@ -31,6 +32,8 @@ object UsageTimeManager {
 
         val stateMap = HashMap<String, AppStateModel>()
         val eventList = usageStatsManager.queryEvents(startDate, endDate)
+
+        var usageByHour = Array(24) { 0 }
 
         while (eventList.hasNextEvent()) {
             val event = UsageEvents.Event()
@@ -51,13 +54,33 @@ object UsageTimeManager {
 
                 UsageEvents.Event.ACTIVITY_STOPPED -> {
                     if (classState.isResume) {
-                        packageState.totalTime += event.timeStamp - classState.startTime
+                        val usageDuration = event.timeStamp - classState.startTime
+
+                        packageState.totalTime += usageDuration
+
+                        val hour = LocalDateTime.ofEpochSecond(
+                            event.timeStamp / 1000,
+                            0,
+                            ZoneOffset.UTC
+                        ).hour
+                        usageByHour[hour] += (usageDuration / 60000).toInt()
+
                         classState.isResume = false
                     }
                 }
             }
         }
 
-        return stateMap.values.sumOf { it.totalTime } / 60000
+        val appUsageDetails = stateMap.map { (packageName, appState) ->
+            AppUsageInfo(
+                appName = packageName,
+                appIcon = packageName, //TODO get icon
+                usageInMinutes = (appState.totalTime / 60000).toInt()
+            )
+        }
+
+        val totalUsage = stateMap.values.sumOf { it.totalTime } / 60000
+
+        return UsageInfoDaily(usageByHour, appUsageDetails, totalUsage)
     }
 }
