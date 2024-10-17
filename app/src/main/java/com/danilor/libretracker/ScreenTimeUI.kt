@@ -1,46 +1,29 @@
 package com.danilor.libretracker
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import java.time.LocalDateTime
-
 //TODO hour-by-hour usage graph
 //TODO change color to red once limit has been reached (to yellow once 80% of the limit is reached)
 //TODO show a list of most used apps
 //TODO button to edit excluded packages
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 @Composable
-fun ScreenTimeUI() {
+fun ScreenTimeUI(viewModel: ScreenTimeViewModel = viewModel()) {
     val context = LocalContext.current
-    var totalTimeSpent by remember { mutableStateOf(0L) }
+
+    val usageInfo = viewModel.usageInfo
 
     LaunchedEffect(Unit) {
-        totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
-            context,
-            LocalDateTime.now().toLocalDate().atStartOfDay()
-        ).totalUsage
+        viewModel.fetchUsageInfo(context)
     }
 
     Column(
@@ -59,7 +42,9 @@ fun ScreenTimeUI() {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = String.format("%02d:%02d", totalTimeSpent / 60, totalTimeSpent % 60),
+            text = String.format(
+                "%02d:%02d", (usageInfo?.totalUsage ?: 0) / 60, (usageInfo?.totalUsage ?: 0) % 60
+            ),
             style = MaterialTheme.typography.displayMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -68,10 +53,7 @@ fun ScreenTimeUI() {
 
         Button(
             onClick = {
-                totalTimeSpent = UsageTimeManager.getDailyUsageTimeInMinutes(
-                    context,
-                    LocalDateTime.now().toLocalDate().atStartOfDay()
-                ).totalUsage
+                viewModel.fetchUsageInfo(context)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -80,7 +62,7 @@ fun ScreenTimeUI() {
         ) {
             Icon(
                 imageVector = Icons.Filled.Refresh,
-                contentDescription = null,
+                contentDescription = "Refresh",
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
