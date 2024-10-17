@@ -7,10 +7,14 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import com.danilor.libretracker.ui.theme.LibreTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,17 +22,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LibreTrackerTheme {
-                ExcludedPackagesManager.initialize(applicationContext)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    ExcludedPackagesManager.initialize(applicationContext)
 
-                var hasPermission by remember { mutableStateOf(checkUsageStatsPermission()) }
+                    var hasPermission by remember { mutableStateOf(checkUsageStatsPermission()) }
 
-                if (hasPermission) {
-                    ScreenTimeUI()
-                } else {
-                    RequestPermissionScreen(onRequestPermission = {
-                        openUsageAccessSettings()
-                        hasPermission = checkUsageStatsPermission()
-                    })
+                    if (hasPermission) {
+                        ScreenTimeUI()
+                    } else {
+                        RequestPermissionScreen(onRequestPermission = {
+                            openUsageAccessSettings()
+                            hasPermission = checkUsageStatsPermission()
+                        })
+                    }
                 }
             }
         }
@@ -49,4 +58,3 @@ class MainActivity : ComponentActivity() {
         startActivity(intent)
     }
 }
-
