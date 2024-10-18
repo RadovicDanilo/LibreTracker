@@ -49,6 +49,8 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
@@ -70,4 +72,5 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.4")
+    implementation("com.github.MahmoudIbrahim3:android-compose-charts:1.2.2")
 }
