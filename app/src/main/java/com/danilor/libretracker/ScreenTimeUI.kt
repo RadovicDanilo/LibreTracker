@@ -1,6 +1,5 @@
 package com.danilor.libretracker
 
-//TODO show a list of most used apps
 //TODO button to edit excluded packages
 
 import android.content.Context
@@ -21,12 +20,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -116,7 +117,7 @@ fun UsageBarChart(usageByHour: Array<Int>?) {
         )
     }
 
-    val verticalAxisValues = listOf(0.0f, 30.0f, 60.0f)
+    val verticalAxisValues = listOf(0f, 30f, 60f)
 
     BarChart(
         barChartData = barChartData,
@@ -146,70 +147,88 @@ fun AppUsageCard(usageByApp: List<AppUsageInfo>?, context: Context) {
         items(usageByApp.sorted()) { appUsage ->
 
             val packageName = appUsage.appName
-            val appName = try {
-                val applicationInfo =
-                    context.applicationContext.packageManager.getApplicationInfo(packageName, 0)
-                val label =
-                    context.applicationContext.packageManager.getApplicationLabel(applicationInfo)
-                        .toString()
-                if (label.isEmpty()) packageName else label
-            } catch (e: PackageManager.NameNotFoundException) {
-                e.printStackTrace()
-                packageName
-            }
 
-            val usageTime = appUsage.usageInMinutes
+            if (!ExcludedPackagesManager.getExcludedPackages().contains(packageName)) {
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium,
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+
+                val appName = try {
+                    val applicationInfo =
+                        context.applicationContext.packageManager.getApplicationInfo(packageName, 0)
+                    val label =
+                        context.applicationContext.packageManager.getApplicationLabel(
+                            applicationInfo
+                        )
+                            .toString()
+                    if (label.isEmpty()) packageName else label
+                } catch (e: PackageManager.NameNotFoundException) {
+                    e.printStackTrace()
+                    packageName
+                }
+
+                val usageTime = appUsage.usageInMinutes
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = CardDefaults.cardElevation(4.dp)
                 ) {
-                    val drawable = try {
-                        context.applicationContext.packageManager.getApplicationIcon(appUsage.appName)
-                    } catch (e: PackageManager.NameNotFoundException) {
-                        e.printStackTrace()
-                        null
-                    }
-
-                    val bitmap = (drawable as? BitmapDrawable)?.bitmap
-
-                    if (bitmap != null) {
-                        Image(
-                            bitmap = bitmap.asImageBitmap(),
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp)
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Filled.Android,
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Column(
-                        modifier = Modifier.weight(1f)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = appName,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Text(
-                            text = "${usageTime}m",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                        val drawable = try {
+                            context.applicationContext.packageManager.getApplicationIcon(appUsage.appName)
+                        } catch (e: PackageManager.NameNotFoundException) {
+                            e.printStackTrace()
+                            null
+                        }
+
+                        val bitmap = (drawable as? BitmapDrawable)?.bitmap
+
+                        if (bitmap != null) {
+                            Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp)
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Filled.Android,
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = appName,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = String.format(
+                                    "%02dh %02dm", usageTime / 60, usageTime % 60
+                                ),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+
+                        IconButton(onClick = {
+                            ExcludedPackagesManager.removePackageFromExclude(packageName)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "Options"
+                            )
+                        }
                     }
                 }
             }
