@@ -1,4 +1,4 @@
-package com.danilor.libretracker
+package com.danilor.libretracker.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 //TODO make it go to ScreenTimeUI once permissions have been granted
 
 @Composable
-fun RequestPermissionScreen(onRequestPermission: () -> Unit) {
+fun RequestPermissionView(onRequestPermission: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()

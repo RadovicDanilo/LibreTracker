@@ -1,4 +1,4 @@
-package com.danilor.libretracker
+package com.danilor.libretracker.managers
 
 import android.content.Context
 import org.json.JSONArray

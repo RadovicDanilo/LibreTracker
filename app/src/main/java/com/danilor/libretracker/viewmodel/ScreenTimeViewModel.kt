@@ -1,4 +1,4 @@
-package com.danilor.libretracker
+package com.danilor.libretracker.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.getValue
@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.danilor.libretracker.managers.UsageTimeManager
+import com.danilor.libretracker.model.UsageInfoDaily
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -15,7 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.danilor.libretracker.managers.ExcludedPackagesManager
+import com.danilor.libretracker.view.RequestPermissionView
 import com.danilor.libretracker.ui.theme.LibreTrackerTheme
+import com.danilor.libretracker.view.ScreenTimeUI
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     if (hasPermission) {
                         ScreenTimeUI()
                     } else {
-                        RequestPermissionScreen(onRequestPermission = {
+                        RequestPermissionView(onRequestPermission = {
                             openUsageAccessSettings()
                             hasPermission = checkUsageStatsPermission()
                         })

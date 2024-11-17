@@ -1,4 +1,4 @@
-package com.danilor.libretracker
+package com.danilor.libretracker.model
 
 data class AppUsageInfo(
     val appName: String,

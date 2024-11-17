@@ -1,8 +1,10 @@
-package com.danilor.libretracker
+package com.danilor.libretracker.managers
 
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import com.danilor.libretracker.model.AppUsageInfo
+import com.danilor.libretracker.model.UsageInfoDaily
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
