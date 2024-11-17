@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,7 +27,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.danilor.libretracker.viewmodel.ScreenTimeViewModel
 
 @Composable
-fun ScreenTimeUI(viewModel: ScreenTimeViewModel = viewModel()) {
+fun ScreenTimeUI(
+    viewModel: ScreenTimeViewModel = viewModel(),
+    onNavigateToExcludedPackages: () -> Unit
+) {
     val context = LocalContext.current
 
     val usageInfo = viewModel.usageInfo
@@ -74,6 +79,26 @@ fun ScreenTimeUI(viewModel: ScreenTimeViewModel = viewModel()) {
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
+        }
+
+        Button(
+            onClick = onNavigateToExcludedPackages,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.FilterList,
+                contentDescription = "Excluded Packages",
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.onSecondary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Excluded Packages")
         }
 
         UsageBarChart(usageByHour = usageInfo?.usageByHour)
