@@ -3,8 +3,10 @@ package com.danilor.libretracker.view
 //TODO button to edit excluded packages
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -81,27 +83,34 @@ fun ScreenTimeUI(
             )
         }
 
-        Button(
-            onClick = onNavigateToExcludedPackages,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.onSecondary
-            ),
+        UsageBarChart(usageByHour = usageInfo?.usageByHour)
+
+        Row(
             modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Filled.FilterList,
-                contentDescription = "Excluded Packages",
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onSecondary
-            )
-            Spacer(modifier = Modifier.width(8.dp))
             Text("Excluded Packages")
+            Button(
+                onClick = onNavigateToExcludedPackages,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.FilterList,
+                    contentDescription = "Excluded Packages",
+                    modifier = Modifier.size(22.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
 
-        UsageBarChart(usageByHour = usageInfo?.usageByHour)
+        Spacer(modifier = Modifier.width(8.dp))
+
         AppUsageCard(usageByApp = usageInfo?.usageByApp, context = context)
     }
 }
