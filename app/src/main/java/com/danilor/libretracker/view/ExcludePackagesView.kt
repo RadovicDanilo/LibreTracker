@@ -12,14 +12,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +41,9 @@ fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) 
     ) {
         Text(
             text = "Excluded Packages",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 8.dp)
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 8.dp),
+            color = MaterialTheme.colorScheme.onSurface
         )
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(packages) { packageInfo ->
@@ -71,8 +72,8 @@ fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) 
         Button(
             onClick = onNavigateToScreenTimeUi,
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colors.secondary,
-                contentColor = MaterialTheme.colors.onSecondary
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ),
             modifier = Modifier
                 .weight(1f)
@@ -82,7 +83,7 @@ fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) 
                 imageVector = Icons.Filled.FilterList,
                 contentDescription = "Excluded Packages",
                 modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colors.onSecondary
+                tint = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text("Excluded Packages")
@@ -107,10 +108,12 @@ fun PackageCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         AppIconDisplay(appIcon)
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = appName,
             modifier = Modifier.weight(1f),
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurface
         )
         Checkbox(
             checked = isExcluded,

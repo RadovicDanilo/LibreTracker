@@ -1,6 +1,5 @@
 package com.danilor.libretracker.view
 
-//TODO button to edit excluded packages
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -92,7 +91,10 @@ fun ScreenTimeUI(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Excluded Packages")
+            Text(
+                color = MaterialTheme.colorScheme.onSurface,
+                text = "Excluded Packages"
+            )
             Button(
                 onClick = onNavigateToExcludedPackages,
                 colors = ButtonDefaults.buttonColors(
