@@ -16,9 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.danilor.libretracker.managers.ExcludedPackagesManager
-import com.danilor.libretracker.view.RequestPermissionView
+import com.danilor.libretracker.nav.AppNavigation
 import com.danilor.libretracker.ui.theme.LibreTrackerTheme
-import com.danilor.libretracker.view.ScreenTimeUI
+import com.danilor.libretracker.view.RequestPermissionView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     var hasPermission by remember { mutableStateOf(checkUsageStatsPermission()) }
 
                     if (hasPermission) {
-                        ScreenTimeUI()
+                        AppNavigation()
                     } else {
                         RequestPermissionView(onRequestPermission = {
                             openUsageAccessSettings()
