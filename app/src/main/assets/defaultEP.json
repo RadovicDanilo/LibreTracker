@@ -459,7 +459,7 @@
     "com.sec.bcservice",
     "com.sec.enterprise.knox.cloudmdm.smdms",
     "com.sec.enterprise.mdm.services.simpin",
-    "com.sec.epdg"
+    "com.sec.epdg",
     "com.sec.epdgtestapp",
     "com.sec.factory.camera",
     "com.sec.factory.cameralyzer",
@@ -486,6 +486,6 @@
     "cz.mobilesoft.appblock",
     "de.axelspringer.yana.zeropage",
     "rkr.simplekeyboard.inputmethod",
-    "vendor.qti.hardware.cacert.server",
+    "vendor.qti.hardware.cacert.server"
   ]
 }
