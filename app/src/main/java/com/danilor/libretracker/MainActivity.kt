@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import com.danilor.libretracker.nav.AppNavigation
 import com.danilor.libretracker.ui.theme.LibreTrackerTheme
 import com.danilor.libretracker.view.RequestPermissionView
 import com.danilor.libretracker.view.widgets.WidgetUpdateWorker
+import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
@@ -37,13 +39,20 @@ class MainActivity : ComponentActivity() {
                     ExcludedPackagesManager.initialize(applicationContext)
 
                     var hasPermission by remember { mutableStateOf(checkUsageStatsPermission()) }
+                    LaunchedEffect(Unit) {
+                        while (!hasPermission) {
+                            if (checkUsageStatsPermission()) {
+                                hasPermission = true
+                            }
+                            delay(1000)
+                        }
+                    }
 
                     if (hasPermission) {
                         AppNavigation()
                     } else {
                         RequestPermissionView(onRequestPermission = {
                             openUsageAccessSettings()
-                            hasPermission = checkUsageStatsPermission()
                         })
                     }
                 }
@@ -51,7 +60,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun scheduleWidgetUpdate(context: Context) {
+    private fun scheduleWidgetUpdate(context: Context) {
         val updateRequest =
             PeriodicWorkRequestBuilder<WidgetUpdateWorker>(1, TimeUnit.MINUTES).build()
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
