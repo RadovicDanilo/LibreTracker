@@ -72,4 +72,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation("androidx.glance:glance-appwidget:1.1.1")
+    implementation("androidx.glance:glance-material3:1.1.1")
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
 }
