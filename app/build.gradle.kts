@@ -68,6 +68,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.google.android.material:compose-theme-adapter-core:1.0.1")
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
+    implementation("androidx.compose.ui:ui-unit-android:1.7.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
     implementation("androidx.navigation:navigation-compose:2.8.4")

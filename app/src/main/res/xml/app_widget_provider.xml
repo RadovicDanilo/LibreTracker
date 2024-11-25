@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:initialLayout="@layout/glance_default_loading_layout"
     android:resizeMode="horizontal|vertical"
-    android:minWidth="310dp"
+    android:minWidth="250dp"
     android:minHeight="110dp"
-    android:targetCellWidth="2"
-    android:targetCellHeight="1"
+    android:targetCellWidth="3"
+    android:targetCellHeight="2"
     tools:targetApi="s" />
