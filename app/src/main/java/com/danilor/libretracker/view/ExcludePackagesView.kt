@@ -34,7 +34,7 @@ import com.danilor.libretracker.view.usage_view.getAppIcon
 import com.danilor.libretracker.view.usage_view.getAppName
 
 @Composable
-fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) {
+fun ExcludePackagesView(context: Context) {
     val packageManager = context.packageManager
     val packages = remember { packageManager.getInstalledPackages(0) }.filterNot {
         ExcludedPackagesManager.getDefaultExcludedPackages().contains(it.packageName)

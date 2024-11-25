@@ -83,20 +83,18 @@ fun UsageBarChart(usageTime: Array<Int>?) {
             )
         }
 
-        if (usageOrdered != null) {
-            for (i in usageOrdered.indices) {
-                val barHeight = (usageOrdered[i] / maxValue) * graphHeight
-                val barLeft = padding + i * barWidth
-                val barRight = barLeft + barWidth * 0.8f
-                val barBottom = canvasHeight - padding
-                val barTop = barBottom - barHeight
+        for (i in usageOrdered.indices) {
+            val barHeight = (usageOrdered[i] / maxValue) * graphHeight
+            val barLeft = padding + i * barWidth
+            val barRight = barLeft + barWidth * 0.8f
+            val barBottom = canvasHeight - padding
+            val barTop = barBottom - barHeight
 
-                drawRect(
-                    color = barColor,
-                    topLeft = Offset(barLeft, barTop),
-                    size = Size(barRight - barLeft, barHeight)
-                )
-            }
+            drawRect(
+                color = barColor,
+                topLeft = Offset(barLeft, barTop),
+                size = Size(barRight - barLeft, barHeight)
+            )
         }
 
         for (i in 0 until hours step 3) {

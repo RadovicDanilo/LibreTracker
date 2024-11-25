@@ -17,7 +17,7 @@ fun AppNavigation() {
             ScreenTimeUI { navController.navigate(Routes.ExcludedPackages) }
         }
         composable(Routes.ExcludedPackages) {
-            ExcludePackagesView(context = LocalContext.current) { navController.navigate(Routes.ScreenTime) }
+            ExcludePackagesView(context = LocalContext.current)
         }
     }
 }
