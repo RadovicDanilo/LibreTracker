@@ -2,6 +2,7 @@ package com.danilor.libretracker.view
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,17 +13,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,61 +32,77 @@ import com.danilor.libretracker.managers.ExcludedPackagesManager
 
 @Composable
 fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) {
-    val packageManager = context.applicationContext.packageManager
-    val packages = packageManager.getInstalledPackages(0)
+    val packageManager = context.packageManager
+    val packages = remember { packageManager.getInstalledPackages(0) }.filterNot {
+        ExcludedPackagesManager.getDefaultExcludedPackages().contains(it.packageName)
+    }.sortedBy { getAppName(context, it.packageName) }
+
+    Log.d("E_PP", "++++")
+    for (pack in packages) {
+        Log.d("E_PP", pack.packageName)
+    }
+    Log.d("E_PP", "----")
+
+    val excludedPackages = remember {
+        mutableStateMapOf<String, Boolean>().apply {
+            packages.forEach {
+                put(
+                    it.packageName,
+                    ExcludedPackagesManager.getAllExcludedPackages().contains(it.packageName)
+                )
+            }
+        }
+    }
+
+    val allExcluded by remember { derivedStateOf { excludedPackages.values.all { it } } }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Excluded Packages",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 8.dp),
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(packages) { packageInfo ->
-                val isExcluded: MutableState<Boolean> =
-                    remember {
-                        mutableStateOf(
-                            ExcludedPackagesManager.getAllExcludedPackages()
-                                .contains(packageInfo.packageName)
-                        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Excluded Packages",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = {
+                    val newState = !allExcluded
+                    excludedPackages.keys.forEach { packageName ->
+                        excludedPackages[packageName] = newState
+                        if (newState) ExcludedPackagesManager.addPackageToExclude(packageName)
+                        else ExcludedPackagesManager.removePackageFromExclude(packageName)
                     }
-                PackageCard(
-                    context = context,
-                    packageInfo = packageInfo,
-                    isExcluded = isExcluded.value,
-                    onCheckedChange = { checked ->
-                        if (checked) {
-                            ExcludedPackagesManager.addPackageToExclude(packageInfo.packageName)
-                        } else {
-                            ExcludedPackagesManager.removePackageFromExclude(packageInfo.packageName)
-                        }
-                        isExcluded.value = checked
-                    }
-                )
+                }, colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ), modifier = Modifier.size(width = 120.dp, height = 48.dp)
+            ) {
+                Text(if (allExcluded) "Include All" else "Exclude All")
             }
         }
-        Button(
-            onClick = onNavigateToScreenTimeUi,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            ),
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.FilterList,
-                contentDescription = "Excluded Packages",
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Excluded Packages")
+
+        val listState = rememberLazyListState()
+        LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
+            items(packages) { packageInfo ->
+                val isExcluded = excludedPackages[packageInfo.packageName] ?: false
+                PackageCard(context = context,
+                    packageInfo = packageInfo,
+                    isExcluded = isExcluded,
+                    onCheckedChange = { checked ->
+                        excludedPackages[packageInfo.packageName] = checked
+                        if (checked) ExcludedPackagesManager.addPackageToExclude(packageInfo.packageName)
+                        else ExcludedPackagesManager.removePackageFromExclude(packageInfo.packageName)
+                    })
+            }
         }
     }
 }
@@ -116,8 +132,7 @@ fun PackageCard(
             color = MaterialTheme.colorScheme.onSurface
         )
         Checkbox(
-            checked = isExcluded,
-            onCheckedChange = onCheckedChange
+            checked = isExcluded, onCheckedChange = onCheckedChange
         )
     }
 }

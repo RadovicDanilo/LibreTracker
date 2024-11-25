@@ -17,12 +17,16 @@ object ExcludedPackagesManager {
             appContext.applicationContext.filesDir, USER_EXCLUDED_PACKAGES_FILE_NAME
         ).absolutePath
         createFileIfNotExists()
-        loadDefaultExcludedPackagesFromFile(appContext)
         loadUserExcludedPackagesFromFile()
+        loadDefaultExcludedPackagesFromFile(appContext)
     }
 
     private var userExcludedPackages: MutableList<String> = mutableListOf()
     private var defaultExcludedPackages: MutableList<String> = mutableListOf()
+
+    fun getDefaultExcludedPackages(): List<String> {
+        return defaultExcludedPackages
+    }
 
     fun getUserExcludedPackages(): List<String> {
         return userExcludedPackages
