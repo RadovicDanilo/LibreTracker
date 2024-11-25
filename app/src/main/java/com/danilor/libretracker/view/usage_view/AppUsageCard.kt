@@ -1,4 +1,4 @@
-package com.danilor.libretracker.view
+package com.danilor.libretracker.view.usage_view
 
 import android.content.Context
 import android.content.pm.PackageManager

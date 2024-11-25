@@ -29,6 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.danilor.libretracker.managers.ExcludedPackagesManager
+import com.danilor.libretracker.view.usage_view.AppIconDisplay
+import com.danilor.libretracker.view.usage_view.getAppIcon
+import com.danilor.libretracker.view.usage_view.getAppName
 
 @Composable
 fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) {

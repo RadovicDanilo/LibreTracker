@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.danilor.libretracker.view.ExcludePackagesView
-import com.danilor.libretracker.view.ScreenTimeUI
+import com.danilor.libretracker.view.usage_view.ScreenTimeUI
 
 @Composable
 fun AppNavigation() {

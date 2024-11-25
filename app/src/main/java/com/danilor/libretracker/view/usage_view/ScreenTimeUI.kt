@@ -1,4 +1,4 @@
-package com.danilor.libretracker.view
+package com.danilor.libretracker.view.usage_view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

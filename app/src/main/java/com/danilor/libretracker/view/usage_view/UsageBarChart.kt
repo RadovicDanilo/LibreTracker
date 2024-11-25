@@ -1,4 +1,4 @@
-package com.danilor.libretracker.view
+package com.danilor.libretracker.view.usage_view
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
