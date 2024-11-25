@@ -29,8 +29,7 @@ import com.danilor.libretracker.viewmodel.ScreenTimeViewModel
 
 @Composable
 fun ScreenTimeUI(
-    viewModel: ScreenTimeViewModel = viewModel(),
-    onNavigateToExcludedPackages: () -> Unit
+    viewModel: ScreenTimeViewModel = viewModel(), onNavigateToExcludedPackages: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -68,8 +67,7 @@ fun ScreenTimeUI(
         Button(
             onClick = {
                 viewModel.fetchUsageInfo(context)
-            },
-            colors = ButtonDefaults.buttonColors(
+            }, colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
@@ -82,7 +80,7 @@ fun ScreenTimeUI(
             )
         }
 
-        UsageBarChart(usageByHour = usageInfo?.usageByHour)
+        UsageBarChart(usageInfo?.usageByHour)
 
         Row(
             modifier = Modifier
@@ -92,12 +90,10 @@ fun ScreenTimeUI(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                color = MaterialTheme.colorScheme.onSurface,
-                text = "Excluded Packages"
+                color = MaterialTheme.colorScheme.onSurface, text = "Excluded Packages"
             )
             Button(
-                onClick = onNavigateToExcludedPackages,
-                colors = ButtonDefaults.buttonColors(
+                onClick = onNavigateToExcludedPackages, colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface
                 )

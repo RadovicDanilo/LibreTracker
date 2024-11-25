@@ -16,7 +16,15 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun UsageBarChart(usageByHour: Array<Int>?) {
+fun UsageBarChart(usageTime: Array<Int>?) {
+    if (usageTime.isNullOrEmpty())
+        return
+
+    val usageOrdered = mutableListOf<Int>()
+    usageOrdered.add(usageTime[23])
+    usageOrdered.addAll(usageTime)
+    usageOrdered.remove(24)
+
     val barColor = MaterialTheme.colorScheme.primary
     val axisColor = MaterialTheme.colorScheme.onSurface
     val backgroundColor = MaterialTheme.colorScheme.surface
@@ -75,9 +83,9 @@ fun UsageBarChart(usageByHour: Array<Int>?) {
             )
         }
 
-        if (usageByHour != null) {
-            for (i in usageByHour.indices) {
-                val barHeight = (usageByHour[i] / maxValue) * graphHeight
+        if (usageOrdered != null) {
+            for (i in usageOrdered.indices) {
+                val barHeight = (usageOrdered[i] / maxValue) * graphHeight
                 val barLeft = padding + i * barWidth
                 val barRight = barLeft + barWidth * 0.8f
                 val barBottom = canvasHeight - padding
