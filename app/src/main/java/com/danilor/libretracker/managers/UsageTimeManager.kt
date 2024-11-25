@@ -30,12 +30,12 @@ object UsageTimeManager {
         val endDate =
             date.toLocalDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
                 .toEpochMilli()
-        val excludedPackages = ExcludedPackagesManager.getExcludedPackages()
+        val excludedPackages = ExcludedPackagesManager.getAllExcludedPackages()
 
         val stateMap = HashMap<String, AppStateModel>()
         val eventList = usageStatsManager.queryEvents(startDate, endDate)
 
-        var usageByHour = Array(24) { 0 }
+        val usageByHour = Array(24) { 0 }
 
         while (eventList.hasNextEvent()) {
             val event = UsageEvents.Event()

@@ -46,7 +46,7 @@ fun AppUsageCard(usageByApp: List<AppUsageInfo>?, context: Context) {
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(usageByApp.sorted()) { appUsage ->
-            if (!ExcludedPackagesManager.getExcludedPackages().contains(appUsage.appName)) {
+            if (!ExcludedPackagesManager.getAllExcludedPackages().contains(appUsage.appName)) {
                 AppUsageItem(appUsage, context)
             }
         }

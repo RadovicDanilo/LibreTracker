@@ -50,7 +50,7 @@ fun ExcludePackagesView(context: Context, onNavigateToScreenTimeUi: () -> Unit) 
                 val isExcluded: MutableState<Boolean> =
                     remember {
                         mutableStateOf(
-                            ExcludedPackagesManager.getExcludedPackages()
+                            ExcludedPackagesManager.getAllExcludedPackages()
                                 .contains(packageInfo.packageName)
                         )
                     }
