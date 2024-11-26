@@ -1,3 +1,5 @@
+package com.danilor.libretracker.view.widgets
+
 import android.content.Context
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
