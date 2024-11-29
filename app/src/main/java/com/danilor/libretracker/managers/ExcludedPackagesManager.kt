@@ -28,10 +28,6 @@ object ExcludedPackagesManager {
         return defaultExcludedPackages
     }
 
-    fun getUserExcludedPackages(): List<String> {
-        return userExcludedPackages
-    }
-
     fun getAllExcludedPackages(): List<String> {
         return userExcludedPackages + defaultExcludedPackages
     }

@@ -76,7 +76,6 @@ object UsageTimeManager {
         val appUsageDetails = stateMap.map { (packageName, appState) ->
             AppUsageInfo(
                 appName = packageName,
-                appIcon = packageName, //TODO get icon
                 usageInMinutes = (appState.totalTime / 60000).toInt()
             )
         }

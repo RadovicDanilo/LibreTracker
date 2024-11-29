@@ -2,7 +2,6 @@ package com.danilor.libretracker.model
 
 data class AppUsageInfo(
     val appName: String,
-    val appIcon: String,
     var usageInMinutes: Int
 ) : Comparable<AppUsageInfo> {
     override fun compareTo(other: AppUsageInfo): Int {

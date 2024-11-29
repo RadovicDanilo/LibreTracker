@@ -19,11 +19,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +31,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import com.danilor.libretracker.managers.ExcludedPackagesManager
 import com.danilor.libretracker.model.AppUsageInfo
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
 fun AppUsageCard(usageByApp: List<AppUsageInfo>?, context: Context) {
@@ -76,25 +75,23 @@ fun AppUsageItem(appUsage: AppUsageInfo, context: Context) {
             Spacer(modifier = Modifier.width(8.dp))
 
             AppInfoDisplay(appName, usageTime)
-
-            IconButton(onClick = {
-                ExcludedPackagesManager.removePackageFromExclude(packageName)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Options"
-                )
-            }
         }
     }
 }
 
 @Composable
 fun AppIconDisplay(drawable: Drawable?) {
-    val bitmap = (drawable as? BitmapDrawable)?.bitmap
-    if (bitmap != null) {
+    if (drawable is BitmapDrawable) {
+        val bitmap = drawable.bitmap
         Image(
             bitmap = bitmap.asImageBitmap(),
+            contentDescription = null,
+            modifier = Modifier.size(40.dp)
+        )
+    } else if (drawable != null) {
+        val painter = rememberDrawablePainter(drawable)
+        Image(
+            painter = painter,
             contentDescription = null,
             modifier = Modifier.size(40.dp)
         )
@@ -128,21 +125,17 @@ fun AppInfoDisplay(appName: String, usageTime: Int) {
 
 fun getAppName(context: Context, packageName: String): String {
     return try {
-        val applicationInfo =
-            context.packageManager.getApplicationInfo(packageName, 0)
-        val label = context.packageManager.getApplicationLabel(applicationInfo).toString()
-        label.ifEmpty { packageName }
+        val applicationInfo = context.packageManager.getApplicationInfo(packageName, 0)
+        applicationInfo.loadLabel(context.packageManager).toString().takeIf { it.isNotEmpty() }
+            ?: applicationInfo.packageName
     } catch (e: PackageManager.NameNotFoundException) {
         e.printStackTrace()
         packageName
     }
 }
 
-fun getAppIcon(context: Context, packageName: String): Drawable? {
-    return try {
-        context.packageManager.getApplicationIcon(packageName)
-    } catch (e: PackageManager.NameNotFoundException) {
-        e.printStackTrace()
-        null
-    }
+fun getAppIcon(context: Context, packageName: String): Drawable? = runCatching {
+    context.packageManager.getApplicationIcon(packageName)
+}.getOrElse {
+    null
 }
