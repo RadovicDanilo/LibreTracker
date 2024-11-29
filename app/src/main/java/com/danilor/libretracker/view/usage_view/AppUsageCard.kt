@@ -90,8 +90,10 @@ fun AppIconDisplay(drawable: Drawable?) {
         )
     } else if (drawable != null) {
         val painter = rememberDrawablePainter(drawable)
-        Icon(
-            painter = painter, contentDescription = null, modifier = Modifier.size(40.dp)
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.size(40.dp)
         )
     } else {
         Icon(
