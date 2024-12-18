@@ -17,10 +17,10 @@ class ScreenTimeViewModel : ViewModel() {
     var usageInfo by mutableStateOf<UsageInfoDaily?>(null)
         private set
 
-    fun fetchUsageInfo(context: Context) {
+    fun fetchUsageInfo(context: Context, dateTime: LocalDateTime) {
         viewModelScope.launch {
             val usage = withContext(Dispatchers.IO) {
-                UsageTimeManager.getDailyUsageTimeInMinutes(context, LocalDateTime.now())
+                UsageTimeManager.getDailyUsageTimeInMinutes(context, dateTime)
             }
             usageInfo = usage
         }
