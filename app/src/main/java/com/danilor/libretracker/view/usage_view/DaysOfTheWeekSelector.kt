@@ -34,7 +34,10 @@ import java.time.temporal.ChronoUnit
 
 @Composable
 fun DayOfTheWeekSelector(
-    initialDateTime: LocalDateTime, context: Context, viewModel: ScreenTimeViewModel
+    initialDateTime: LocalDateTime,
+    context: Context,
+    viewModel: ScreenTimeViewModel,
+    onDateSelected: (LocalDateTime) -> Unit
 ) {
     val currentWeekStart = remember { mutableStateOf(getStartOfWeek(initialDateTime)) }
     val selectedDate = remember { mutableStateOf(initialDateTime) }
@@ -69,6 +72,7 @@ fun DayOfTheWeekSelector(
                 onClick = {
                     currentWeekStart.value = currentWeekStart.value.minus(1, ChronoUnit.WEEKS)
                     selectedDate.value = currentWeekStart.value
+                    onDateSelected(currentWeekStart.value)
                 })
 
 
@@ -76,11 +80,12 @@ fun DayOfTheWeekSelector(
                 val dayDate = currentWeekStart.value.plusDays(i.toLong())
                 DayButton(
                     dateTime = dayDate,
-                    isSelected = dayDate.dayOfWeek == selectedDate.value.dayOfWeek,
+                    isSelected = dayDate.toLocalDate() == selectedDate.value.toLocalDate(),
                     onClick = {
-                        if (LocalDateTime.now()
-                                .toLocalDate() >= dayDate.toLocalDate()
-                        ) selectedDate.value = dayDate
+                        if (LocalDateTime.now().toLocalDate() >= dayDate.toLocalDate()) {
+                            selectedDate.value = dayDate
+                            onDateSelected(dayDate)
+                        }
                     },
                 )
             }
@@ -94,6 +99,7 @@ fun DayOfTheWeekSelector(
                     ) {
                         currentWeekStart.value = currentWeekStart.value.plus(1, ChronoUnit.WEEKS)
                         selectedDate.value = currentWeekStart.value
+                        onDateSelected(currentWeekStart.value)
                     }
                 })
         }

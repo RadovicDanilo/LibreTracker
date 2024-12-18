@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,11 +34,18 @@ fun ScreenTimeUI(
     viewModel: ScreenTimeViewModel = viewModel(), onNavigateToExcludedPackages: () -> Unit
 ) {
     val context = LocalContext.current
-
     val usageInfo = viewModel.usageInfo
+    val selectedDate = remember { mutableStateOf(LocalDateTime.now()) }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchUsageInfo(context, LocalDateTime.now())
+        viewModel.fetchUsageInfo(context, selectedDate.value)
+    }
+
+    LaunchedEffect(selectedDate.value) {
+        while (true) {
+            viewModel.fetchUsageInfo(context, selectedDate.value)
+            kotlinx.coroutines.delay(60_000L)
+        }
     }
 
     Column(
@@ -64,9 +73,10 @@ fun ScreenTimeUI(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        DayOfTheWeekSelector(
-            initialDateTime = LocalDateTime.now(), context = context, viewModel = viewModel
-        )
+        DayOfTheWeekSelector(initialDateTime = selectedDate.value,
+            context = context,
+            viewModel = viewModel,
+            onDateSelected = { newDate -> selectedDate.value = newDate })
 
         UsageBarChart(usageInfo?.usageByHour)
 
