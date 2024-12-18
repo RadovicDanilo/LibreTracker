@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -26,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.danilor.libretracker.viewmodel.ScreenTimeViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun ScreenTimeUI(
@@ -36,14 +36,14 @@ fun ScreenTimeUI(
     val usageInfo = viewModel.usageInfo
 
     LaunchedEffect(Unit) {
-        viewModel.fetchUsageInfo(context)
+        viewModel.fetchUsageInfo(context, LocalDateTime.now())
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -58,27 +58,15 @@ fun ScreenTimeUI(
             text = String.format(
                 "%02d:%02d", (usageInfo?.totalUsage ?: 0) / 60, (usageInfo?.totalUsage ?: 0) % 60
             ),
-            style = MaterialTheme.typography.displayMedium,
+            style = MaterialTheme.typography.displayLarge,
             color = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(
-            onClick = {
-                viewModel.fetchUsageInfo(context)
-            }, colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Refresh,
-                contentDescription = "Refresh",
-                modifier = Modifier.size(32.dp),
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+        DayOfTheWeekSelector(
+            initialDateTime = LocalDateTime.now(), context = context, viewModel = viewModel
+        )
 
         UsageBarChart(usageInfo?.usageByHour)
 
@@ -90,7 +78,7 @@ fun ScreenTimeUI(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                color = MaterialTheme.colorScheme.onSurface, text = "Excluded Packages"
+                color = MaterialTheme.colorScheme.onSurface, text = "Usage per app"
             )
             Button(
                 onClick = onNavigateToExcludedPackages, colors = ButtonDefaults.buttonColors(
