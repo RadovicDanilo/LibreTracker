@@ -33,6 +33,14 @@ import com.danilor.libretracker.view.usage_view.AppIconDisplay
 import com.danilor.libretracker.view.usage_view.getAppIcon
 import com.danilor.libretracker.view.usage_view.getAppName
 
+fun logPackaged(packages: List<PackageInfo>) {
+    val logTag = "INSTALLED_PACKAGES"
+    Log.d(logTag, "List of installed packages (excluding those from defaultEP.json):")
+    packages.forEach { packageName ->
+        Log.d(logTag, packageName.toString())
+    }
+}
+
 @Composable
 fun ExcludePackagesView(context: Context) {
     val packageManager = context.packageManager
@@ -40,11 +48,7 @@ fun ExcludePackagesView(context: Context) {
         ExcludedPackagesManager.getDefaultExcludedPackages().contains(it.packageName)
     }.sortedBy { getAppName(context, it.packageName) }
 
-    Log.d("E_PP", "++++")
-    for (pack in packages) {
-        Log.d("E_PP", pack.packageName)
-    }
-    Log.d("E_PP", "----")
+    logPackaged(packages)
 
     val excludedPackages = remember {
         mutableStateMapOf<String, Boolean>().apply {
