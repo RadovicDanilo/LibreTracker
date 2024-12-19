@@ -38,7 +38,3 @@ Check your app usage visually with interactive bar charts. You can easily compar
 
 Create Widgets:
 Add widgets to your home screen for quick access to your screen time and app usage stats. Keep track of your usage directly from your home screen.
-
-## 📄 License
-
-This app is open-source and licensed under the GPL-3.0 License. You can freely use, modify, and distribute this software, but if you distribute it (modified or not), you must do so under the same license.****
