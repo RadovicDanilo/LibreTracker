@@ -492,7 +492,7 @@
     "com.netflix.partner.activation",
     "com.osp.app.signin",
     "app.revanced.android.gms",
-    "com.microsoft.appmanager"
+    "com.microsoft.appmanager",
     "android.instant_app"
   ]
 }
