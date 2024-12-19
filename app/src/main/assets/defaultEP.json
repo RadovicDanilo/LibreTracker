@@ -486,6 +486,12 @@
     "cz.mobilesoft.appblock",
     "de.axelspringer.yana.zeropage",
     "rkr.simplekeyboard.inputmethod",
-    "vendor.qti.hardware.cacert.server"
+    "vendor.qti.hardware.cacert.server",
+    "com.qualcomm.qti.gpudrivers.sm6150.api30",
+    "com.sec.facatfunction",
+    "com.netflix.partner.activation",
+    "com.osp.app.signin",
+    "app.revanced.android.gms",
+    "com.microsoft.appmanager"
   ]
 }
