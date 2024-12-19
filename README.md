@@ -46,10 +46,6 @@ Add **widgets** to your home screen for quick access to your screen time and app
 
 ## 📸 **Screenshots**
 
-```markdown
-![Screenshot of LibreTracker](https://github.com/RadovicDanilo/libretracker/blob/main/assets/screenshot1.png)
-```
+![Alt text](/screenshots/screenshot1.jpeg?raw=true "Optional Title")
 
-```markdown
-![App Dashboard](https://github.com/RadovicDanilo/libretracker/blob/main/assets/screenshot1.png)
-```
+![Alt text](/screenshots/screenshot2.jpeg?raw=true "Optional Title")
