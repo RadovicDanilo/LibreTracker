@@ -10,24 +10,6 @@
 - **💻 App usage tracking**: View the time spent on individual apps.
 - **📱 Widgets**: Create custom widgets to quickly monitor your screen time.
 
-## 🔧 **Installation**
-
-### 1. Clone the repository:
-
-```bash
-git clone https://github.com/RadovicDanilo/libretracker.git
-```
-
-### 2. Open the project in Android Studio.
-
-### 3. Build the APK:
-
-Go to **Build > Build APK(s)** in Android Studio.
-
-### 4. Install the APK:
-
-Once built, install the APK on your device to start using **LibreTracker**.
-
 ## 📝 **How to Use**
 
 ### 1. **Grant Permissions**  
