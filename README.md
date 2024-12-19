@@ -3,11 +3,11 @@
 LibreTracker helps you monitor your screen time by showing daily usage stats. You can select specific days to view and exclude unwanted packages. It displays the time you spent using each app with a bar chart and usage per app. Additionally, it allows you to create widgets to keep track of your screen time.
 🌟 Features
 
-    📅 View usage per day: Easily check your screen time for any specific day.
-    🚫 Exclude unwanted apps: Filter out apps you don’t want to track.
-    📊 Bar chart visualizations: See your app usage over time with an interactive bar chart.
-    💻 App usage tracking: View the time spent on individual apps.
-    📱  Widgets: Create custom widgets to quickly monitor your screen time.
+📅 View usage per day: Easily check your screen time for any specific day.
+🚫 Exclude unwanted apps: Filter out apps you don’t want to track.
+📊 Bar chart visualizations: See your app usage over time with an interactive bar chart.
+💻 App usage tracking: View the time spent on individual apps.
+📱  Widgets: Create custom widgets to quickly monitor your screen time.
 
 🔧 Installation
 
