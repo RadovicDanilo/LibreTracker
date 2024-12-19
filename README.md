@@ -46,6 +46,8 @@ Add **widgets** to your home screen for quick access to your screen time and app
 
 ## 📸 **Screenshots**
 
-![Alt text](/screenshots/screenshot1.jpeg?raw=true "Optional Title")
+<p float="left">
+  <img src="/screenshots/screenshot1.jpeg?raw=true" width="200" />
+  <img src="/screenshots/screenshot2.jpeg?raw=true" width="200" />
+</p>
 
-![Alt text](/screenshots/screenshot2.jpeg?raw=true "Optional Title")
